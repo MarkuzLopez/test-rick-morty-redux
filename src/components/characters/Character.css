@@ -1,0 +1,7 @@
+.lista { 
+    display: flex;
+    flex-direction: column;
+    flex-flow: row;
+    flex-wrap: wrap;
+    font-size: 14px;
+}
