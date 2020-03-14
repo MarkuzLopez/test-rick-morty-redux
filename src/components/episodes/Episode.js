@@ -15,6 +15,7 @@ class Episode extends Component {
 
     render() {
         let characters = [];
+        //* <<-- en caaso de no obtener respuesta de la API no se mostrara la informacion del episodio -->>
         if(this.props.fetching) return <div className="alert alert-primary text-center"> <strong>Cargando...</strong> </div>;
         const { episode } =  this.props;
         if(episode.characters) {

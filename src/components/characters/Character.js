@@ -11,16 +11,14 @@ class Character extends Component {
     }
 
     render(){
-        
          let episode = [];
+         //* <<-- en caaso de no obtener respuesta de la API no se mostrara la informacion del personaje -->>
          if(this.props.fetching) return <div className="alert alert-primary text-center"> <strong>Cargando...</strong> </div>;
          const { character } = this.props;
 
         if(character.episode) { 
           episode = character.episode   
         }
-
-        console.log(this.props);
          
         return(
             <div className="mt-5" >

@@ -3,12 +3,13 @@ import  Url  from '../shared/envioroment/Url';
 
 const { url } = Url;
 
+//* <<-- constantes -->>
 let initialData = { 
     fetching: false,
     characters: [],
     character: { }
 }
-
+//* <<-- acciones que se estarián solicitando -->>
 let GET_CHARACTERS = "GET_CHARACTERS";
 let GET_CHARACTERS_SUCCESS = "GET_CHARACTERS_SUCCESS";
 let GET_CHARACTERS_ERROR = "GET_CHARACTERS_ERROR";
@@ -17,7 +18,12 @@ let GET_CHARACTERS_EDIT = "GET_CHARACTERS_EDIT";
 let GET_CHARACTERS_EDIT_SUCCESS = "GET_CHARACTERS_EDIT_SUCCESS";
 let GET_CHARACTERS_EDIT_ERROR = "GET_CHARACTERS_EDIT_ERROR";
 
+let GET_SEARCH = "GET_SEARCH";
+let GET_SEARCH_SUCCES = "GET_SEARCH_SUCCES";
+let GET_SEARCH_ERROR = "GET_SEARCH_ERROR";
 
+
+//* <<-- seccion  de reducer para poder caambiar los estado segun sea las acciones  -->>
 export default function reducer( state = initialData, action) {
     switch(action.type){ 
 
@@ -38,14 +44,23 @@ export default function reducer( state = initialData, action) {
         
         case GET_CHARACTERS_EDIT_ERROR:
             return {...state,  error: action.payload}
+
+        case GET_SEARCH: 
+            return { ...state, fetching: true }
+
+        case GET_SEARCH_SUCCES: 
+            return { ...state,character: action.payload, fetching: false }
         
+        case GET_SEARCH_ERROR: 
+            return {...state, error: action.payload }
         default:
             return state
     }
 }
 
 
-// actions  
+//* <<-- seccion de las funciones de las accciones con API  -->> 
+
 export let getCharactersAction = () => (dispatch, getState ) => { 
     dispatch({
         type: GET_CHARACTERS
@@ -79,7 +94,18 @@ export let getCharacterViewAction = (id) => (dispatch, getState) => {
 
 
 export let searchCharacterAction = (word) => (dispatch, getState) => {
-    return axios.get(`${url}/character/`, { params: { name: word } }).then(res => { 
-        console.log(res.data);
+    dispatch({
+        type: GET_SEARCH
     })
-} 
+    return axios.get(`${url}/character/`, { params: { name: word } }).then(res => { 
+        dispatch({ 
+            type: GET_SEARCH_SUCCES,
+            payload: res.data
+        })
+    }).catch(err => {
+        dispatch({
+            type: GET_SEARCH_ERROR,
+            payload: err
+        })
+    })
+}

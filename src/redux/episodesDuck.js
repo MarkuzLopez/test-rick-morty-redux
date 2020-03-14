@@ -3,11 +3,14 @@ import Url from '../shared/envioroment/Url';
 
 const { url } =  Url;
 
+//* <<-- constantes -->>
 let initialData = { 
     fetching: false,
     episodes: [],
     episode: {}
 }
+
+//* <<-- acciones que se estarián solicitando -->>
 
 let GET_EPISODES = "GET_EPISODES";
 let GET_EPISODES_SUCCES = "GET_EPISODES_SUCCES";
@@ -17,6 +20,7 @@ let GET_EPISODE_VIEW = "GET_EPISODE_VIEW";
 let GET_EPISODE_VIEW_SUCCESS = "GET_EPISODE_VIEW_SUCCESS";
 let GET_EPISODE_VIEW_ERROR = "GET_EPISODE_VIEW_ERROR";
 
+//* <<-- seccion  de reducer para poder caambiar los estado segun sea las acciones  -->>
 export default function reducer(state = initialData, action) {
     
     switch(action.type) {
@@ -37,13 +41,13 @@ export default function reducer(state = initialData, action) {
         
         case GET_EPISODE_VIEW_ERROR:
             return { ...state, error: action.payload }
-        
+         
         default:
             return state;
     }
 }
 
-
+//* <<-- seccion de las funciones de las accciones con API  -->>
 export let getEpisodesAction = () => (dispatch, getState) => { 
     dispatch({
         type: GET_EPISODES
@@ -77,11 +81,5 @@ export let getEpisodeViewAction = (id) => (dispatch, getState) => {
             type: GET_EPISODE_VIEW_ERROR,
             error: err
         })
-    })
-}
-
-export let searchEpisodeAction = (word) => (dispatch, getState) => { 
-    return axios.get(`${url}/character/`, { params: { episode: word } }).then(res => { 
-        console.log(res.data);  
     })
 }
