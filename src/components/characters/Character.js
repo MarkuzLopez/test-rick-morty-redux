@@ -9,19 +9,21 @@ class Character extends Component {
         const {id} = this.props.match.params;
         this.props.getCharacterViewAction(id);
     }
-
+    
     render(){
-         let episode = [];
-         //* <<-- en caaso de no obtener respuesta de la API no se mostrara la informacion del personaje -->>
-         if(this.props.fetching) return <div className="alert alert-primary text-center"> <strong>Cargando...</strong> </div>;
-         const { character } = this.props;
+        let episode = [];
+        const validar = <div className="alert alert-primary text-center"> <strong>Cargando...</strong> </div>;
 
-        if(character.episode) { 
-          episode = character.episode   
+         //* <<-- se realizao la deesructuracion del objeto, y se valido para que se renderice sin no tiene la informacion del personaje -->>
+        const { character } = this.props;
+        if(this.props.character !== undefined && this.props.character.name) { 
+            episode = this.props.character.episode;
         }
-         
+
         return(
             <div className="mt-5" >
+               { episode.length > 0 ? 
+                <React.Fragment>
                     <h1 className="titleSeccions">{character.name}</h1>
                     <div className="card-deck">
                         <div className="col-md-3" >
@@ -33,7 +35,6 @@ class Character extends Component {
                                     <p>{character.status}</p>
                                     <p>{character.gender}</p>
                                     <p>Numero de capitulos en las que aparece: {character.episode.length}</p>
-                                    {/* <p className="card-text"><small className="text-muted">{character.specie}</small></p> */}
                                 </div>
                             </div>
                         </div>
@@ -47,20 +48,49 @@ class Character extends Component {
                                                <li>{ree}</li>
                                            </ul>
                                         )) }
-                                    {/* <p className="card-text"><small className="text-muted">{character.specie}</small></p> */}
                                 </div>
                             </div>
                         </div>
                     </div>
+                </React.Fragment>
+               : validar}
+                    {/* <h1 className="titleSeccions">{character.name}</h1>
+                    <div className="card-deck">
+                        <div className="col-md-3" >
+                            <div className="card mt-4" >
+                                <img src={character.image} className="card-img-top" alt={character.name} />
+                                <div className="card-body">
+                                    <h5 className="card-title">{character.name}</h5>
+                                    <p>{character.species}</p>
+                                    <p>{character.status}</p>
+                                    <p>{character.gender}</p>
+                                    <p>Numero de capitulos en las que aparece: {character.episode.length}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-md-9" >
+                            <div className="card mt-4" >
+                                <h3 className="text-center">Lista de Capitulos</h3>
+                                <div className="card-body lista"> 
+                                        { episode.map((ree, index) =>  (
+                                           <ul key={index} >
+                                               <li>{ree}</li>
+                                           </ul>
+                                        )) }
+                                </div>
+                            </div>
+                        </div>
+                    </div> */}
             </div>
         )
     }
 }
 
-function mapState (state) { 
+function mapState ({characters}) { 
    return { 
-       character: state.characters.character,
-       fetching: state.characters.fetching
+       character: characters.character,
+       fetching: characters.fetching
    }
 }
 
